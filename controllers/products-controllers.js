@@ -2,8 +2,11 @@ import path from 'path';
 
 import ctrlWrapper from '../decorators/ctrlWrapper.js';
 import { HttpError } from '../helpers/HttpError.js';
+import cloudinary from '../helpers/cloudinary.js';
 import Product from '../models/product-model.js';
 import fs from 'fs/promises';
+
+const { CLOUDINARY_FOLDER_PRODUCTS } = process.env;
 
 const imagesPath = path.resolve('public', 'images', 'products');
 
@@ -38,14 +41,15 @@ const getProductById = async (req, res) => {
 
 const addProduct = async (req, res) => {
   const { _id: owner } = req.user;
-  const { path: oldPath, filename } = req.files;
-  req.files.map(async file => {
-    const newPath = path.join(imagesPath, file.filename);
-    await fs.rename(file.path, newPath);
-  });
-  const images = req.files.map(file => {
-    return path.join('public', 'images', 'products', file.filename);
-  });
+  const images = await Promise.all(
+    req.files.map(async file => {
+      const { url } = await cloudinary.uploader.upload(file.path, {
+        folder: CLOUDINARY_FOLDER_PRODUCTS,
+      });
+      await fs.unlink(file.path);
+      return url;
+    })
+  );
   const result = await Product.create({ ...req.body, images, owner });
   res.status(201).json(result);
 };
