@@ -20,8 +20,6 @@ router.post(
   userControllers.login
 );
 
-router.get('/current', middlewares.authenticate, userControllers.getCurrent);
-
 router.post('/logout', middlewares.authenticate, userControllers.logout);
 
 export default router;

@@ -18,8 +18,10 @@ const signup = async (req, res) => {
 
   res.status(201).json({
     user: {
-      name: newUser.name,
+      firstname: newUser.firstname,
+      lastname: newUser.lastname,
       email: newUser.email,
+      phone: newUser.phone,
     },
   });
 };
@@ -42,18 +44,11 @@ const login = async (req, res) => {
   await User.findByIdAndUpdate(user._id, { token });
   res.json({
     user: {
-      name: user.name,
+      firstname: user.firstname,
+      lastname: user.lastname,
       email: user.email,
     },
     token,
-  });
-};
-
-const getCurrent = async (req, res) => {
-  const { name, email } = req.user;
-  res.json({
-    name,
-    email,
   });
 };
 
@@ -69,6 +64,5 @@ const logout = async (req, res) => {
 export default {
   signup: ctrlWrapper(signup),
   login: ctrlWrapper(login),
-  getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
 };

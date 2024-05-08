@@ -3,18 +3,27 @@ import { Schema, model } from 'mongoose';
 import { handleSaveError, preUpdate } from './hooks.js';
 
 export const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+export const phoneRegexp = /^(\+)?((\d{2,3}) ?\d|\d)(([ -]?\d)|( ?(\d{2,3}) ?)){5,12}\d$/;
 
 const userchema = new Schema(
   {
-    name: {
+    firstname: {
       type: String,
       required: [true, 'Set name for user'],
+    },
+    lastname: {
+      type: String,
+      required: [true, 'Set last name for user'],
     },
     email: {
       type: String,
       match: emailRegexp,
       unique: true,
       required: true,
+    },
+    phone: {
+      type: String,
+      match: phoneRegexp,
     },
     password: {
       type: String,
