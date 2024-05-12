@@ -16,12 +16,11 @@ router.patch(
   userControllers.updateUser
 );
 
-// router.patch(
-//   '/favorites',
-//   middlewares.authenticate,
-//   middlewares.isEmptyBody,
-//   validateBody(updateUserWaterRateSchema),
-//   userControllers.updateFavorites,
-// );
+router.patch(
+  '/:id/favorites',
+  middlewares.authenticate,
+  middlewares.isValidId,
+  userControllers.updateFavorites
+);
 
 export default router;

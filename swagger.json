@@ -14,11 +14,11 @@
     },
     {
       "name": "User",
-      "description": "Users endpoints"
+      "description": "User's endpoints"
     },
     {
-      "name": "WaterRate",
-      "description": "Calculation of the daily rate of water consumption"
+      "name": "Product",
+      "description": "Product's endpoints"
     },
     {
       "name": "WaterNotes",
@@ -176,39 +176,31 @@
       }
     },
 
-    "/api/user/avatars": {
+    "/api/user/{id}/favorites": {
       "patch": {
         "tags": ["User"],
-        "summary": "Upload user avatar",
+        "summary": "Add or delete favorite products",
 
-        "parameters": [],
-        "security": [{ "Bearer": [] }],
-
-        "requestBody": {
-          "description": "User avatar",
-          "required": true,
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "avatar": {
-                    "type": "string",
-                    "format": "binary"
-                  }
-                }
-              }
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id of product",
+            "required": true,
+            "schema": {
+              "type": "string"
             }
           }
-        },
+        ],
+        "security": [{ "Bearer": [] }],
 
         "responses": {
           "200": {
-            "description": "Avatar uploaded successfully",
+            "description": "Product add to favorites successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AvatarUploadResponse"
+                  "$ref": "#/components/schemas/EditFavoriteProductsResponse"
                 }
               }
             }
@@ -224,7 +216,7 @@
             }
           },
           "404": {
-            "description": "File not found",
+            "description": "Not found",
             "content": {
               "application/json": {
                 "example": {
@@ -298,61 +290,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UpdateResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "content": {
-              "application/json": {
-                "example": {
-                  "message": "Error in request"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Not authorized",
-            "content": {
-              "application/json": {
-                "example": {
-                  "message": "Not authorized"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-
-    "/api/user/waterrate": {
-      "patch": {
-        "tags": ["WaterRate"],
-        "summary": "Updating the amount of water the user should consume",
-
-        "parameters": [],
-        "security": [{ "Bearer": [] }],
-
-        "requestBody": {
-          "description": "Update object",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateWaterRateRequest"
-              }
-            }
-          }
-        },
-
-        "responses": {
-          "200": {
-            "description": "Update successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UpdateWaterRateResponse"
                 }
               }
             }
@@ -796,6 +733,11 @@
             "type": "string",
             "description": "User's email",
             "format": "email"
+          },
+          "phone": {
+            "type": "string",
+            "description": "User's phone",
+            "example": "+380951111111"
           }
         }
       },
@@ -814,30 +756,25 @@
       "UpdateRequest": {
         "type": "object",
         "properties": {
-          "name": {
+          "firstname": {
             "type": "string",
             "description": "User's name",
-            "example": "User"
+            "example": "Ivan"
+          },
+          "lastname": {
+            "type": "string",
+            "description": "User's last name",
+            "example": "Petrovych"
           },
           "email": {
             "type": "string",
             "description": "User's email",
             "format": "email"
           },
-          "gender": {
+          "phone": {
             "type": "string",
-            "description": "Gender's name",
-            "example": "male"
-          },
-          "password": {
-            "type": "string",
-            "description": "User's password",
-            "format": "password"
-          },
-          "newpassword": {
-            "type": "string",
-            "description": "User's newpassword",
-            "format": "password"
+            "description": "User's phone",
+            "example": "+380951111111"
           }
         }
       },
@@ -850,30 +787,25 @@
             "description": "User's id",
             "example": "6589653003eb8cee657a2155"
           },
-          "name": {
+          "firstname": {
             "type": "string",
             "description": "User's name",
-            "example": "user"
+            "example": "Ivan"
+          },
+          "lastname": {
+            "type": "string",
+            "description": "User's last name",
+            "example": "Petrovych"
           },
           "email": {
             "type": "string",
             "description": "User's email",
             "format": "email"
           },
-          "gender": {
+          "phone": {
             "type": "string",
-            "description": "User's gender",
-            "example": "male || female"
-          },
-          "waterRate": {
-            "type": "number",
-            "description": "User's gender",
-            "example": 1500
-          },
-          "avatarURL": {
-            "type": "string",
-            "description": "User's avatar",
-            "example": "http://res.cloudinary.com/de2jtjawf/image/upload/v1703802348/WaterTracker/avatars/znf1ix7cjicz2jgib9fo.jpg"
+            "description": "User's phone",
+            "example": "+380951111111"
           },
           "createdAt": {
             "type": "string",
@@ -888,25 +820,48 @@
         }
       },
 
-      "UpdateWaterRateRequest": {
-        "type": "object",
-        "required": ["waterRate"],
-        "properties": {
-          "waterRate": {
-            "type": "number",
-            "description": "Water Rate",
-            "example": 1500
-          }
-        }
-      },
-
-      "UpdateWaterRateResponse": {
+      "EditFavoriteProductsResponse": {
         "type": "object",
         "properties": {
-          "waterRate": {
-            "type": "number",
-            "description": "Water Rate",
-            "example": 1500
+          "_id": {
+            "type": "string",
+            "description": "User's id",
+            "example": "6589653003eb8cee657a2155"
+          },
+          "firstname": {
+            "type": "string",
+            "description": "User's name",
+            "example": "Ivan"
+          },
+          "lastname": {
+            "type": "string",
+            "description": "User's last name",
+            "example": "Petrovych"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "phone": {
+            "type": "string",
+            "description": "User's phone",
+            "example": "+380951111111"
+          },
+          "favorites": {
+            "type": "array",
+            "description": "Product's id",
+            "example": ["6637fadbe38251a0dd058bb9"]
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "User's date created",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "description": "User's date updated",
+            "format": "date-time"
           }
         }
       },

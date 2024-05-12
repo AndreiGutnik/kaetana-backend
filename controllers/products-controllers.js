@@ -29,10 +29,11 @@ const getAllProducts = async (req, res) => {
 };
 
 const getProductById = async (req, res) => {
-  const { _id: owner } = req.user;
+  //const { _id: owner } = req.user;
   const { id } = req.params;
-  const result = await Product.findOne({ _id: id, owner });
-  //const result = await Product.findById(id);
+  console.log(id);
+  //const result = await Product.findOne({ _id: id, owner });
+  const result = await Product.findById(id);
   if (!result) {
     throw HttpError(404, 'Not found');
   }

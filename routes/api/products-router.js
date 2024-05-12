@@ -10,7 +10,7 @@ import {
 
 const router = express.Router();
 
-router.get('/', productsController.getAllProducts);
+//router.get('/', productsController.getAllProducts);
 
 router.get('/:id', middlewares.isValidId, productsController.getProductById);
 
