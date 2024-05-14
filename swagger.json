@@ -17,12 +17,12 @@
       "description": "User's endpoints"
     },
     {
-      "name": "Product",
-      "description": "Product's endpoints"
+      "name": "Category",
+      "description": "Categorie's endpoints"
     },
     {
-      "name": "WaterNotes",
-      "description": "Editing information on consumed water"
+      "name": "Products",
+      "description": "Product's endpoints"
     },
     {
       "name": "Today",
@@ -243,7 +243,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CurrentUserResponse"
+                  "$ref": "#/components/schemas/GetCurrentUserResponse"
                 }
               }
             }
@@ -318,10 +318,50 @@
       }
     },
 
-    "/api/waternotes": {
+    "/api/products": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "Getting all products",
+
+        "parameters": [],
+        "security": [],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation all products",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GettingAllProductsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Bad request"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Not authorized"
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
-        "tags": ["WaterNotes"],
-        "summary": "Adding a record of consumed water",
+        "tags": ["Products"],
+        "summary": "Adding a record of product",
 
         "parameters": [],
         "security": [{ "Bearer": [] }],
@@ -332,7 +372,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AddWaterRequest"
+                "$ref": "#/components/schemas/AddProducRequest"
               }
             }
           }
@@ -344,7 +384,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AddWaterResponse"
+                  "$ref": "#/components/schemas/AddProducResponse"
                 }
               }
             }
@@ -373,9 +413,9 @@
       }
     },
 
-    "/api/waternotes/{id}": {
+    "/api/products/{id}": {
       "put": {
-        "tags": ["WaterNotes"],
+        "tags": ["Products"],
         "summary": "Editing of the account of consumed water",
 
         "parameters": [
@@ -445,12 +485,9 @@
             }
           }
         }
-      }
-    },
-
-    "/api/waternotes/{id} ": {
+      },
       "delete": {
-        "tags": ["WaterNotes"],
+        "tags": ["Products"],
         "summary": "Deleting a record of consumed water",
 
         "parameters": [
@@ -711,7 +748,7 @@
         }
       },
 
-      "CurrentUserResponse": {
+      "GetCurrentUserResponse": {
         "type": "object",
         "properties": {
           "_id": {
@@ -866,7 +903,65 @@
         }
       },
 
-      "AddWaterRequest": {
+      "GettingAllProductsResponse": {
+        "type": "object",
+        "properties": {
+          "products": {
+            "type": "array",
+            "description": "Arroy of product's object",
+            "items": {
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "description": "Product's id",
+                  "example": "658e004ee30d5287149784d2"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Title of product's",
+                  "example": "ДОМ гель очищуючий"
+                },
+                "price": {
+                  "type": "number",
+                  "description": "Price of product's",
+                  "example": 19.5
+                },
+                "desc": {
+                  "type": "string",
+                  "description": "Description of product's",
+                  "example": "Трохи гелю видавіть у вологі лодоні, розітріть та нанесість на вологе обличчя легкими круговими рухами, приділивши особливу увагу Т-зоні (чоло, носа, підборіддя). Ретельно змийте теплою водою."
+                },
+                "images": {
+                  "type": "array",
+                  "description": "Array of pfth to products",
+                  "items": {
+                    "type": "string",
+                    "description": "Path to product",
+                    "example": "http://res.cloudinary.com/dhobomrxe/image/upload/v1714979074/Kaetana/products/dqptgzc0ercpbdoawaie.png"
+                  }
+                },
+                "createdAt": {
+                  "type": "string",
+                  "description": "User's date created",
+                  "format": "date-time"
+                },
+                "updatedAt": {
+                  "type": "string",
+                  "description": "User's date updated",
+                  "format": "date-time"
+                }
+              }
+            }
+          },
+          "total": {
+            "type": "integer",
+            "description": "Total products",
+            "example": 10
+          }
+        }
+      },
+
+      "AddProducRequest": {
         "type": "object",
         "required": ["amountWater"],
         "properties": {
@@ -883,7 +978,7 @@
         }
       },
 
-      "AddWaterResponse": {
+      "AddProducResponse": {
         "type": "object",
         "properties": {
           "date": {

@@ -20,10 +20,10 @@ const getAllProducts = async (req, res) => {
   //   'owner',
   //   'name email'
   // );
-  const result = await Product.find(filter, '-createdAt, -updatedAt', { skip, limit });
+  const products = await Product.find(filter, '-createdAt, -updatedAt', { skip, limit });
   const total = await Product.countDocuments(filter);
   res.json({
-    result,
+    products,
     total,
   });
 };
