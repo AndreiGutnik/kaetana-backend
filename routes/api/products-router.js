@@ -3,8 +3,7 @@ import express from 'express';
 import productsController from '../../controllers/products-controllers.js';
 import middlewares from '../../middlewares/index.js';
 import {
-  productAddSchema,
-  productFavoriteSchema,
+  productAddSchema, // productFavoriteSchema,
   productUpdateSchema,
 } from '../../schemas/products-schemas.js';
 
@@ -35,13 +34,13 @@ router.put(
   productsController.updateProductById
 );
 
-router.patch(
-  '/:id/favorite',
-  middlewares.isValidId,
-  middlewares.isEmptyBodyFavorite,
-  middlewares.validateBody(productFavoriteSchema),
-  productsController.updateProductById
-);
+// router.patch(
+//   '/:id/favorite',
+//   middlewares.isValidId,
+//   middlewares.isEmptyBodyFavorite,
+//   middlewares.validateBody(productFavoriteSchema),
+//   productsController.updateProductById
+// );
 
 router.delete(
   '/:id',

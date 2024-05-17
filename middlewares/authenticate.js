@@ -1,13 +1,9 @@
-import jwt from 'jsonwebtoken';
-
 import ctrlWrapper from '../decorators/ctrlWrapper.js';
 import { HttpError } from '../helpers/HttpError.js';
-import User from '../models/user-model.js';
-
-const { JWT_SECRET } = process.env;
+import tokenService from '../service/token-service.js';
 
 const authenticate = async (req, res, next) => {
-  const { authorization = '' } = req.headers;
+  const { authorization } = req.headers;
   if (!authorization) {
     next(HttpError(401, 'Not authorized')); //Authorization header not found
   }
@@ -16,12 +12,11 @@ const authenticate = async (req, res, next) => {
     next(HttpError(401, 'Not authorized')); //Authorization header invalid
   }
   try {
-    const { id } = jwt.verify(token, JWT_SECRET);
-    const user = await User.findById(id);
-    if (!user || !user.token || user.token !== token) {
-      next(HttpError(401, 'Not authorized')); //user not found
+    const userData = await tokenService.validateAccessToken(token);
+    if (!userData) {
+      next(HttpError(401, 'Not authorized')); //token is not found or valid
     }
-    req.user = user;
+    req.user = userData;
     next();
   } catch (error) {
     next(HttpError(401, error.message));

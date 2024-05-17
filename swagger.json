@@ -965,15 +965,20 @@
         "type": "object",
         "required": ["amountWater"],
         "properties": {
-          "date": {
+          "title": {
             "type": "string",
-            "description": "Time of water consumption",
-            "format": "date-time"
+            "description": "Title of product's",
+            "example": "ДОМ гель очищуючий"
           },
-          "amountWater": {
+          "price": {
             "type": "number",
-            "description": "Amount of water consumed",
-            "example": 250
+            "description": "Price of product's",
+            "example": 19.5
+          },
+          "desc": {
+            "type": "string",
+            "description": "Description of product's",
+            "example": "Трохи гелю видавіть ..."
           }
         }
       },
@@ -981,25 +986,34 @@
       "AddProducResponse": {
         "type": "object",
         "properties": {
-          "date": {
-            "type": "string",
-            "description": "Time of water consumption",
-            "format": "date-time"
-          },
-          "amountWater": {
-            "type": "number",
-            "description": "Amount of water consumed",
-            "example": 250
-          },
-          "owner": {
-            "type": "string",
-            "description": "User's id",
-            "example": "6589653003eb8cee657a2155"
-          },
           "_id": {
             "type": "string",
-            "description": "Note's id",
+            "description": "Product's id",
             "example": "658e004ee30d5287149784d2"
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of product's",
+            "example": "ДОМ гель очищуючий"
+          },
+          "price": {
+            "type": "number",
+            "description": "Price of product's",
+            "example": 19.5
+          },
+          "desc": {
+            "type": "string",
+            "description": "Description of product's",
+            "example": "Трохи гелю видавіть ..."
+          },
+          "images": {
+            "type": "array",
+            "description": "Array of pfth to products",
+            "items": {
+              "type": "string",
+              "description": "Path to product",
+              "example": "http://res.cloudinary.com/dhobomrxe/image/upload/v1714979074/Kaetana/products/dqptgzc0ercpbdoawaie.png"
+            }
           },
           "createdAt": {
             "type": "string",

@@ -13,18 +13,16 @@ export const productAddSchema = Joi.object({
     'any.required': `missing required "description"`,
     'string.base': `"description" must be string`,
   }),
-  favorite: Joi.boolean(),
 });
 
 export const productUpdateSchema = Joi.object({
   title: Joi.string(),
   price: Joi.string(),
   desc: Joi.string(),
-  favorite: Joi.boolean(),
 });
 
-export const productFavoriteSchema = Joi.object({
-  favorite: Joi.boolean().required().messages({
-    'any.required': `missing field "favorite"`,
-  }),
-});
+// export const productFavoriteSchema = Joi.object({
+//   favorite: Joi.boolean().required().messages({
+//     'any.required': `missing field "favorite"`,
+//   }),
+// });

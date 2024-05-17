@@ -1,22 +1,24 @@
 import ctrlWrapper from '../decorators/ctrlWrapper.js';
 import Product from '../models/product-model.js';
 import User from '../models/user-model.js';
+import userService from '../service/user-service.js';
+
+const { CLIENT_URL } = process.env;
+
+const getUsers = async (req, res) => {
+  const users = await userService.getAllUsers();
+  res.json(users);
+};
 
 const getCurrent = async (req, res) => {
-  const { _id, firstname, lastname, email, phone } = req.user;
-  console.log(req.user);
+  const { _id, firstname = '', lastname = '', email, phone = '' } = req.user;
   res.json({
-    id: _id,
-    firstname,
-    lastname,
-    email,
-    phone,
+    ...req.user,
   });
 };
 
 const updateUser = async (req, res) => {
   const { _id } = req.user;
-  console.log(req.user);
   await User.findOneAndUpdate({ _id }, req.body);
   const user = await User.findById(_id, '-password -token');
   res.json(user);
@@ -38,7 +40,7 @@ const updateFavorites = async (req, res) => {
     });
   } else {
     favorites.splice(userProdIdx, 1);
-    console.log(favorites);
+
     await User.findByIdAndUpdate(userId, {
       favorites: [...favorites],
     });
@@ -47,8 +49,27 @@ const updateFavorites = async (req, res) => {
   res.json(user);
 };
 
+const verify = async (req, res) => {
+  const verificationLink = req.params.link;
+  await userService.verify(verificationLink);
+  res.redirect(CLIENT_URL);
+};
+
+const refresh = async (req, res) => {
+  const { refreshToken } = req.cookies;
+  const userData = await userService.refresh(refreshToken);
+  res.cookie('refreshToken', userData.refreshToken, {
+    maxAge: 30 * 24 * 60 * 60 * 100,
+    httpOnly: true,
+  });
+  res.json(userData);
+};
+
 export default {
+  getUsers: ctrlWrapper(getUsers),
   getCurrent: ctrlWrapper(getCurrent),
   updateUser: ctrlWrapper(updateUser),
   updateFavorites: ctrlWrapper(updateFavorites),
+  verify: ctrlWrapper(verify),
+  refresh: ctrlWrapper(refresh),
 };

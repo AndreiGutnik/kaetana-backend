@@ -5,15 +5,15 @@ import { handleSaveError, preUpdate } from './hooks.js';
 export const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 export const phoneRegexp = /^(\+)?((\d{2,3}) ?\d|\d)(([ -]?\d)|( ?(\d{2,3}) ?)){5,12}\d$/;
 
-const userchema = new Schema(
+const userSchema = new Schema(
   {
     firstname: {
       type: String,
-      required: [true, 'Set name for user'],
+      default: 'User',
     },
     lastname: {
       type: String,
-      required: [true, 'Set last name for user'],
+      default: '',
     },
     email: {
       type: String,
@@ -35,13 +35,16 @@ const userchema = new Schema(
         type: String,
       },
     ],
-    token: {
-      type: String,
-      default: '',
+    verify: {
+      type: Boolean,
+      default: false,
     },
-    // verify: {
-    //   type: Boolean,
-    //   default: false,
+    verificationLink: {
+      type: String,
+    },
+    // accessToken: {
+    //   type: String,
+    //   default: '',
     // },
     // verificationToken: {
     //   type: String,
@@ -50,12 +53,12 @@ const userchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-userchema.post('save', handleSaveError);
+userSchema.post('save', handleSaveError);
 
-userchema.pre('findOneAndUpdate', preUpdate);
+userSchema.pre('findOneAndUpdate', preUpdate);
 
-userchema.post('findOneAndUpdate', handleSaveError);
+userSchema.post('findOneAndUpdate', handleSaveError);
 
-const User = model('user', userchema);
+const User = model('user', userSchema);
 
 export default User;
