@@ -157,7 +157,74 @@
             "content": {
               "application/json": {
                 "example": {
-                  "message": "User signed out"
+                  "message": "Logout success"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Not authorized"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/user/users": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Getting all users",
+
+        "parameters": [],
+
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation all users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GettingAllUsersResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Not authorized"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/user/current": {
+      "get": {
+        "tags": ["User"],
+        "summary": "User information",
+
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation user current",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCurrentUserResponse"
                 }
               }
             }
@@ -221,39 +288,6 @@
               "application/json": {
                 "example": {
                   "message": "File not found"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-
-    "/api/user/current": {
-      "get": {
-        "tags": ["User"],
-        "summary": "User information",
-
-        "parameters": [],
-        "security": [{ "Bearer": [] }],
-
-        "responses": {
-          "200": {
-            "description": "Successful operation user current",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetCurrentUserResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Not authorized",
-            "content": {
-              "application/json": {
-                "example": {
-                  "message": "Not authorized"
                 }
               }
             }
@@ -728,22 +762,32 @@
           "user": {
             "type": "object",
             "properties": {
-              "name": {
+              "id": {
                 "type": "string",
-                "description": "User's name",
-                "format": "User"
+                "description": "User's id",
+                "example": "6646566682eecf42a233a089"
               },
               "email": {
                 "type": "string",
                 "description": "User's email",
                 "format": "email"
+              },
+              "verify": {
+                "type": "boolean",
+                "description": "User is verify",
+                "example": "true"
               }
             }
           },
-          "token": {
+          "accessToken": {
             "type": "string",
             "description": "User's token",
-            "format": "jwt"
+            "example": "jwt accessToken"
+          },
+          "refreshToken": {
+            "type": "string",
+            "description": "User's token",
+            "example": "jwt refreshToken"
           }
         }
       },
@@ -902,6 +946,8 @@
           }
         }
       },
+
+      "GettingAllUsersResponse": {},
 
       "GettingAllProductsResponse": {
         "type": "object",
